@@ -1,0 +1,20 @@
+{
+  "app": {
+    "name": "ToDoApp",
+    "port": 3017,
+    "secret": "HX7@RNvZYBY2a%HJRdQ!u3AnBc@iXH0x",
+    "url": ""
+  },
+  "jwt": {
+    "duration": 3600000,
+    "duration_long": 604800000
+  },
+  "db_url": "mongodb://localhost:27017/marketplace",
+  "notifications": {
+    "url": "localhost:3000"
+  },
+  "mail": {
+    "username": "",
+    "password": ""
+  }
+}

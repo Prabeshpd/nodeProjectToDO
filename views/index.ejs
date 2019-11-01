@@ -70,6 +70,26 @@
           }
         });
         let data = await request.createRequest();
+      },
+
+      edit: async () => {
+        let name = document.querySelector('[name = "name"]').value;
+        let email = document.querySelector('[name = "email"]').value;
+        let phone = document.querySelector("[name = phone]").value;
+        let data = { name, email, phone };
+        let request = new NetworkInterceptor({
+          method: "post",
+          url: "meEdit",
+          data,
+          headers: { access_token: getAccessToken() },
+          onSuccess: response => {
+            console.log(response);
+            document.querySelector('[name = "name"]').value = response.name;
+            document.querySelector('[name = "email"]').value = response.email;
+            document.querySelector('[name = "phone"]').value = response.phone;
+          }
+        });
+        let dataasd = await request.createRequest();
       }
     };
     let fetchButton = document.getElementById("fetchUser");
@@ -81,6 +101,11 @@
     fetchExternal.onclick = e => {
       e.preventDefault();
       page.fetchExternal();
+    };
+    let editButton = document.getElementById("btn-edit");
+    editButton.onclick = e => {
+      e.preventDefault();
+      page.edit();
     };
   </script>
 </html>

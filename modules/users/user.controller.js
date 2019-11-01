@@ -35,6 +35,11 @@ class Controller {
     return UserModel.create(userPayload);
   }
 
+  async update(id, payload) {
+    console.log(payload);
+    return UserModel.findOneAndUpdate({ _id: ObjectId(id) }, { $set: payload }, { new: true });
+  }
+
   async authenticate({ username, password }) {
     let tokenData = null;
     let user = await this.verifyLogin({ username, password });

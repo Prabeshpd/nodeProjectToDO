@@ -54,4 +54,15 @@ router.get("/book", SecureAPI(), async (req, res, next) => {
   res.json(response);
 });
 
+router.post("/meEdit", SecureAPI(), async (req, res, next) => {
+  console.log("adfsd");
+  let user_id = req.tokenData.user_id;
+  let payload = req.body;
+  console.log(req.body);
+  console.log(payload);
+  UserController.update(user_id, payload)
+    .then(d => res.json(d))
+    .catch(e => next(e));
+});
+
 module.exports = router;

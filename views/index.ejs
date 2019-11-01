@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Index Page</title>
+    <link rel="stylesheet" href="/stylesheets/layout.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="box-container">
+        <div class="fetch-button">
+          <input type="submit" class="fetch-button" value="Fetch User Info" id="fetchUser" />
+        </div>
+        <div class="fetch-external">
+          <input type="submit" class="fetch-button" value="Fetch external Api" id="fetchExternal" />
+        </div>
+        <div class="medicine-index">
+          <form action="" id="frmUserDetail">
+            <label for="name" class="form-inline">Name</label>
+            <input type="text" name="name" class="form-inline" />
+            <label for="email" class="form-inline">Email</label>
+            <input type="text" name="email" class="form-inline" />
+            <label for="phone" class="form-inline">Phone</label>
+            <input type="number" name="phone" class="form-inline" />
+            <div class="submit-buttton">
+              <input type="submit" class="form-submit" value="Edit" id="btn-edit" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="/javascripts/networkInterceptor/utils/errorHandlers.js"></script>
+  <script src="/javascripts/networkInterceptor/utils/index.js"></script>
+  <script src="/javascripts/networkInterceptor/manage/base.js"></script>
+  <script src="/javascripts/networkInterceptor/manage/get.js"></script>
+  <script src="/javascripts/networkInterceptor/manage/post.js"></script>
+  <script src="/javascripts/networkInterceptor/manage/put.js"></script>
+  <script src="/javascripts/networkInterceptor/manage/delete.js"></script>
+  <script src="/javascripts/networkInterceptor/index.js"></script>
+
+  <script>
+    const page = {
+      fetch: async () => {
+        let request = new NetworkInterceptor({
+          method: "get",
+          url: "me",
+
+          headers: { access_token: getAccessToken() },
+          onSuccess: response => {
+            document.querySelector('[name = "name"]').value = response.name;
+            document.querySelector('[name = "email"]').value = response.email;
+            document.querySelector('[name = "phone"]').value = response.phone;
+          }
+        });
+        let dataasd = await request.createRequest();
+      },
+      fetchExternal: async () => {
+        let request = new NetworkInterceptor({
+          method: "get",
+          url: "/book",
+          headers: { access_token: getAccessToken() },
+          onSuccess: response => {
+            console.log(response);
+            document.querySelector('[name = "name"]').value = response.name;
+            document.querySelector('[name = "email"]').value = response.email;
+            document.querySelector('[name = "phone"]').value = response.phone;
+          }
+        });
+        let data = await request.createRequest();
+      }
+    };
+    let fetchButton = document.getElementById("fetchUser");
+    fetchButton.onclick = e => {
+      e.preventDefault();
+      page.fetch();
+    };
+    let fetchExternal = document.getElementById("fetchExternal");
+    fetchExternal.onclick = e => {
+      e.preventDefault();
+      page.fetchExternal();
+    };
+  </script>
+</html>

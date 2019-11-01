@@ -5,6 +5,7 @@ const appSecret = config.get("app.secret");
 const { generateRandomPassword, ERR } = require("../../utils/index");
 const Token = require("../../utils/tokenManager");
 const UserModel = require("../users/user.model");
+const SecureCrypto = require("../../utils/encrypt_decrypt");
 
 const tokenManager = new Token({ appSecret });
 
@@ -12,12 +13,12 @@ const throwError = err => {
   throw Error(err);
 };
 
-const createTokenData = async user => {
-  let permissions = await RoleController.calculatePermissions(user.roles);
-  return {
-    permissions
-  };
-};
+// const createTokenData = async user => {
+//   let permissions = await RoleController.calculatePermissions(user.roles);
+//   return {
+//     permissions
+//   };
+// };
 
 class Controller {
   constructor() {
@@ -35,10 +36,11 @@ class Controller {
   }
 
   async authenticate({ username, password }) {
+    let tokenData = null;
     let user = await this.verifyLogin({ username, password });
-    let token = await this.generateToken(user, (tokenData = createTokenData));
-    user.token = token;
-    return user;
+    let token = await this.generateToken(user);
+    let userWithToken = Object.assign({}, { user }, { token });
+    return userWithToken;
   }
 
   async checkUserName(username) {
@@ -87,6 +89,10 @@ class Controller {
     return UserModel.findOne({ username: username });
   }
 
+  getById(id) {
+    return UserModel.findOne({ _id: ObjectId(id) });
+  }
+
   async generateToken(user, tokenData = {}) {
     let data = {};
     if (typeof tokenData === "function") data = await tokenData(user);
@@ -95,6 +101,7 @@ class Controller {
       user_id: user.id,
       name_first: user.name
     });
+
     return tokenManager.generate(data, this.jwtDuration);
   }
 
@@ -106,6 +113,7 @@ class Controller {
     let { email, name, phone } = extras;
     let password = generateRandomPassword(8);
     let payload = Object.assign({}, { email, phone, name, service_id, password, username: email });
+
     return this.add(payload);
   }
 
@@ -114,19 +122,20 @@ class Controller {
   }
 
   async verifyLogin({ username, password, type }) {
-    try {
-      if (!username) throw "UserName is required";
-      if (!password) throw "Password is required";
-      let user = await this.getByUsername({ username });
-      password = await SecureCrypto.hash(password, Buffer.from(user.password.salt, "base64"));
-      if (user.password.hash !== password.hash.toString("base64"))
-        throw Error("Invalid Login Options");
-      user.password = null;
+    if (!username) throw "UserName is required";
+    if (!password) throw "Password is required";
+    let user = await this.getByUsername({ username });
 
-      return user;
-    } catch (e) {
-      return e;
+    if (!user) {
+      throw "Invalid Login Options";
     }
+
+    password = await SecureCrypto.hash(password, Buffer.from(user.password.salt, "base64"));
+    if (user.password.hash !== password.hash.toString("base64"))
+      throw Error("Invalid Login Options");
+    user.password = null;
+
+    return user;
   }
 }
 

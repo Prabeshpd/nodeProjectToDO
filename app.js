@@ -1,4 +1,4 @@
-var createError = require("http-errors");
+// var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
 var bodyParser = require("body-parser");
@@ -10,7 +10,7 @@ const config = require("config");
 var routeManager = require("./routes");
 var app = express();
 
-mongoose.connect(config.get("db_url"), { useNewUrlParser: true });
+mongoose.connect(config.get("db_url"), { useNewUrlParser: true, useUnifiedTopology: true });
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

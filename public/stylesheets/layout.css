@@ -1,0 +1,41 @@
+.container {
+  margin: 5%;
+}
+
+.login-container {
+  margin: 20%;
+  background: #add8e6;
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.move-right {
+  float: right;
+}
+
+form {
+  margin: 5%;
+}
+
+.form-inline {
+  display: block;
+  line-height: 20px;
+  width: 70%;
+}
+
+.label {
+  margin: 7px;
+}
+
+.form-submit {
+  line-height: 40px;
+  margin: 7px 7px 7px 40%;
+}
+
+.submit-buttton {
+  margin: 5px;
+}

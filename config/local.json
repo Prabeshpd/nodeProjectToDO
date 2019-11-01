@@ -9,9 +9,16 @@
     "duration": 3600000,
     "duration_long": 604800000
   },
-  "db_url": "mongodb://localhost:27017/marketplace",
+  "db_url": "mongodb://localhost:27017/demo",
   "notifications": {
     "url": "localhost:3000"
+  },
+  "services": {
+    "test": {
+      "username": "prqbesh1995",
+      "password": "t$mp1234",
+      "url": "http://localhost:3019/"
+    }
   },
   "mail": {
     "username": "",
